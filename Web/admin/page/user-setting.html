@@ -1,0 +1,117 @@
+<style>
+    .layui-form-item .layui-input-company {
+        width: auto;
+        padding-right: 10px;
+        line-height: 38px;
+    }
+</style>
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <div class="layui-form layuimini-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">管理账号</label>
+                <div class="layui-input-block">
+                    <input type="text" id="username" name="username" lay-verify="required" lay-reqtext="管理账号不能为空"
+                           placeholder="请输入管理账号" value="admin" class="layui-input">
+                    <tip>填写自己管理账号的名称。</tip>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" id="name"  lay-verify="required" lay-reqtext="姓名不能为空" name="name" placeholder="请输入姓名" value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">手机</label>
+                <div class="layui-input-block">
+                    <input type="text" id="tel"name="tel" lay-verify="required" lay-reqtext="手机不能为空" placeholder="请输入手机"
+                           value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注信息</label>
+                <div class="layui-input-block">
+                    <textarea id="note" name="note" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'miniPage', 'jquery'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            miniPage = layui.miniPage;
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        //渲染数据
+        $(document).ready(function () {
+            $.ajax({
+                url: "../../Api/admin/admin_info.php",
+                data: {action: 'getAdmin_Info'},
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    $('#username').val(data.data['username']);
+                    $('#name').val(data.data['name']);
+                    $('#tel').val(data.data['tel']);
+                    $('#note').val(data.data['note']);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+
+                }
+        });
+    });
+    //听提交
+    form.on('submit(saveBtn)', function (data) {
+        data.field.action="updateAdmin_Info";
+        $.ajax({
+            url: "../../Api/admin/admin_info.php",
+            data:data.field,
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if(data.code==200){
+                    layer.msg(data.msg);
+                    // setTimeout(function (){
+                    //     location.reload();
+                    // }, 1000);
+                }else{
+                    layer.msg(data.msg);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("状态码："+xhr.status);
+                alert("状态:"+xhr.readyState);//当前状态,0-未初始化，1-正在载入，2-已经载入，3-数据进行交互，4-完成。
+                alert("错误信息:"+xhr.statusText );
+                alert("返回响应信息："+xhr.responseText );//这里是详细的信息
+                alert("请求状态："+textStatus);
+                alert(errorThrown);
+                alert("请求失败");
+            }
+        });
+        // var index = layer.alert(JSON.stringify(data.field), {
+        //     title: '最终的提交信息'
+        // }, function () {
+        //     layer.close(index);
+        //     miniPage.hashHome();
+        // });
+        return false;
+    });
+
+    })
+    ;
+</script>

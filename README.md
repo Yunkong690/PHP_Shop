@@ -1,2 +1,3 @@
-# PHP_Shop
-PHP原生开发商城DEMO
+# PHP_SHOP商城项目
+
+创建项目

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提交订单 - 织梦商城模板-dedehtml.com</title>
+    <meta name="keywords" content="织梦商城模板,织梦小商城,织梦商城支付">
+    <meta name="description" content="织梦购物商城源码，集成购物车，会员系统，支付系统，商品属性，红包，优惠券">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../res/static/css/index.css">
+</head>
+<body>
+<div class="house-header">
+    <div class="layui-container">
+        <div class="house-nav header">
+            <span class="layui-breadcrumb memberinfo" lay-separator="|">
+             <a href="../member/login.html" id="turnLogin"><label id="username_bar"></label></a>
+            <a href="" id="logout">退出</a>
+        </span>
+            <span class="layui-breadcrumb house-breadcrumb-icon" lay-separator=" "><a id="search"><i
+                    class="layui-icon layui-icon-house-find"></i></a> <a href="/member/"><i
+                    class="layui-icon layui-icon-username"></i></a> <a href="/plus/car.php"><i
+                    class="layui-icon layui-icon-house-shop"></i></a></span></div>
+        <div class="house-banner layui-form"><a class="banner" href="/"><img src="../res/static/img/logo.png"
+                                                                             alt="织梦商城模板-dedehtml.com"></a>
+            <div class="layui-input-inline"><input type="text" placeholder="搜索好物" class="layui-input"><i
+                    class="layui-icon layui-icon-house-find"></i></div>
+            <a class="shop" href="/plus/car.php"><i class="layui-icon layui-icon-house-shop"></i><span
+                    class="layui-badge totalNum"></span></a></div>
+        <ul class="layui-nav close">
+            <li class="layui-nav-item layui-this"><a href="../index.html">首页</a></li>
+            <li class="layui-nav-item "><a href="../all/index.html">所有商品</a></li>
+<!--            <li class="layui-nav-item "><a href="/device/">小家电</a></li>-->
+<!--            <li class="layui-nav-item "><a href="/wash/">洗护</a></li>-->
+<!--            <li class="layui-nav-item "><a href="/kitchen/">厨具</a></li>-->
+<!--            <li class="layui-nav-item "><a href="/supplies/">日用品</a></li>-->
+        </ul>
+        <button id="switch"><span></span><span class="second"></span><span class="third"></span></button>
+    </div>
+</div>
+<div class="layui-container" style="margin-top:20px;margin-bottom:20px">
+    <form class="layui-form" id="checkoutform" name="checkoutform" ><input
+            name="do" type="hidden" value="clickout">
+        <div class="layui-collapse">
+            <div class="layui-colla-item"><h2 class="layui-colla-title">收货人信息</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-form-item">
+                        <div class="layui-inline"><label class="layui-form-label"><span>*</span>收货人</label>
+                            <div class="layui-input-inline"><input name="postname" id="postname" readonly="readonly" type="text" required
+                                                                   lay-verify="required" autocomplete="off"
+                                                                   class="layui-input"></div>
+                        </div>
+                        <div class="layui-inline"><label class="layui-form-label"><span>*</span>手机号码</label>
+                            <div class="layui-input-inline"><input name="tel" id="tel" readonly="readonly" type="text" required
+                                                                   lay-verify="required|phone" autocomplete="off"
+                                                                   class="layui-input"></div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="area-picker"><label
+                            class="layui-form-label"><span>*</span>所在地区</label>
+                        <div class="layui-input-block">
+                            <div class="layui-inline"><select name="province" disabled="disabled" id="province" class="province-selector"
+                                                              data-value="福建省">
+                                <option value="">请选择省</option>
+                            </select></div>
+                            <div class="layui-inline"><select name="city" disabled="disabled" id="city" class="city-selector" data-value="广州市">
+                                <option value="">请选择市</option>
+                            </select></div>
+                            <div class="layui-inline"><select name="county" disabled="disabled" id="county" class="county-selector" data-value="天河区">
+                                <option value="">请选择区</option>
+                            </select></div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item"><label class="layui-form-label"><span>*</span>详细地址</label>
+                        <div class="layui-input-block"><textarea id=address readonly="readonly" name="address" lay-verify="required"
+                                                                 placeholder="详细地址，街道、门牌号等"
+                                                                 class="layui-textarea"></textarea></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-colla-item"><h2 class="layui-colla-title">商品列表</h2>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table" lay-even lay-skin="nob" id="goodsItem">
+                        <thead>
+                        <tr>
+                            <th>商品名称</th>
+                            <th>规格</th>
+                            <th>本店价</th>
+                            <th>数量</th>
+                            <th>小计</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-colla-item deliveryarr"><h2 class="layui-colla-title">配送方式</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-btn-container">
+                        <button type="button" class="fly-form-btn layui-btn layui-btn-primary layui-this" data-id="2">顺丰快递</button>
+                        <input type="hidden" name="pid" value="" ></div>
+                </div>
+            </div>
+            <div class="layui-colla-item paymentarr"><h2 class="layui-colla-title">支付方式</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-btn-container">
+                        <button type="button" class="fly-form-btn layui-btn layui-btn-primary layui-this" data-id="7">余额支付
+                        </button>
+                        <input type="hidden" name="paytype" value="" ></div>
+                </div>
+            </div>
+            <div class="layui-colla-item"><h2 class="layui-colla-title">费用总计</h2>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <td>订单编号</td>
+                            <td><label id="order_id"></label></td>
+                        </tr>
+                        <tr>
+                            <td>商品总数</td>
+                            <td id="totalNum">1</td>
+                        </tr>
+                        <tr>
+                            <td>商品总价</td>
+                            <td><span style="color:#d02b18">￥<big><b id="totalPrice"
+                                                                     style="font-size:18px">0.20</b></big></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="clickoutBtn">
+            <button class="layui-btn layui-btn-lg layui-btn-fluid" lay-submit lay-filter="confirmPay"><i
+                    class="layui-icon layui-icon-house-shop"></i>确认支付
+            </button>
+        </div>
+    </form>
+</div>
+<div class="house-footer">
+    <div class="layui-container">
+        <div class="intro"><span class="first"><i class="layui-icon layui-icon-house-shield"></i>7天无理由退换货</span> <span
+                class="second"><i class="layui-icon layui-icon-house-car"></i>满99元全场包邮</span> <span class="third"><i
+                class="layui-icon layui-icon-house-diamond"></i>100%品质保证</span> <span class="last"><i
+                class="layui-icon layui-icon-house-tel"></i>客服400-8888-866</span></div>
+        <div class="about"><span class="layui-breadcrumb" lay-separator="|"><a href="/about.html">关于我们</a><a
+                href="/help.html">帮助中心</a><a href="/service.html">售后服务</a><a href="/delivery.html">配送服务</a><a
+                href="/supply.html">关于货源</a></span>
+            <p>织梦商城模板 版权所有 &copy; 2012-2020</p></div>
+    </div>
+</div>
+<script src="../res/layui/layui.js"></script>
+<script>
+    var order_id = getQueryVariable('order_id');
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        return (false);
+    }
+    layui.use(['jquery', 'layer','form'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            form=layui.form,
+            totalPrice=0,
+            totalNum = 0,
+            user_id;
+        var orderItem_Id=[];
+        $(document).ready(function () {
+            var orderItem = JSON.parse(localStorage.getItem("orderItem"+order_id));
+            user_id=orderItem[0].user_id;
+            for (var i = 0; i < orderItem.length; i++) {
+                console.log(orderItem[i]);
+                orderItem_Id.push(orderItem[i].id);
+                totalNum+=parseInt(orderItem[i].buynum);
+                totalPrice+= (orderItem[i].buynum * orderItem[i].price);
+                var data = "  <tr>\n" +
+                    "                            <td>\n" +
+                    "                                <div class=\"pro\">\n" +
+                    "                                    <div class=\"img\">" +
+                    "<a href=" + "http://10.0.0.100/Shop/Web/pay/goods/detail.html?good_id=" + orderItem[i].good_id +
+                    " target=\"_blank\" " +
+                    "title=" + orderItem[i].name + ">" +
+                    "<img src= " + orderItem[i].cover +
+                    " style=\"display:inline\" border=\"0\" height=\"70\" width=\"70\"></a>" +
+                    "</div>\n" +
+                    " <p>" +
+                    "<a href=" + "http://10.0.0.100/Shop/Web/pay/goods/detail.html?good_id=" + orderItem[i].good_id +
+                    "target=\"_blank\" " +
+                    "title=" + orderItem[i].name + ">" + orderItem[i]['name'] +
+                    "</a></p></div>\n" +
+                    " </td>\n" +
+                    " <td> " + orderItem[i].specs + "<br/></td>" +
+                    "<td>" + orderItem[i].price + "</td>\n" +
+                    "<td>" + orderItem[i].buynum + "</td>\n" +
+                    "<td>￥" + (orderItem[i].buynum * orderItem[i].price).toFixed(2) + "</td>\n" +
+                    "</tr>";
+                $('#goodsItem').append(data);
+            }
+            document.getElementById("order_id").innerHTML = order_id;
+            //获取收货人信息
+            $.ajax({
+                url: "http://10.0.0.100/Shop/Api/user/userController.php",
+                data: {action: 'getAddress',user_id:user_id },
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        document.getElementById("postname").value = data.data['name'];
+                        document.getElementById("tel").value = data.data['tel'];
+                        var str =  data.data['address'];
+                        var reg = /.+?(省|市|自治区|自治州|县|区)/g; // 省市区的正则
+                        var reg2 = str.match(/县|区(\S*)/)[1];
+                        $address=str.match(reg);
+                        $address.push(reg2);
+                        console.log($address);
+                        $("#province").attr('data-value',$address[0]);
+                        $("#city").attr('data-value',$address[1]);
+                        $("#county").attr('data-value',$address[2]);
+                        $("#address").val($address[3]);
+                    } else {
+
+                    }
+                },
+            })
+            document.getElementById("totalNum").innerText = totalNum;
+            document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
+        });
+
+        form.on('submit(confirmPay)', function (data) {
+            data.field['action']="payOrder";
+            data.field['item_id']=orderItem_Id;
+            data.field['order_id']=order_id;
+            data.field['user_id']=user_id;
+            data.field['totalNum']=totalNum;
+            data.field['totalPrice']=totalPrice;
+            console.log(data.field);
+            $.ajax({
+                url: "http://10.0.0.100/Shop/Api/order/orderController.php",
+                data: data.field,
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if(data.code>0){
+                        console.log(data);
+                        layer.msg(data.msg);
+                    }else{
+                        layer.msg('下单成功！');
+                        setTimeout(function(){
+                            window.location.href="http://10.0.0.100/Shop/Web/pay/index.html";
+                        },1000)
+                    }
+
+                },
+            })
+            return false;
+        });
+    });
+</script>
+<script>layui.config({base: "../res/static/js/"}).use("house")</script>
+</body>
+</html>

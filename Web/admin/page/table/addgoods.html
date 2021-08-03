@@ -1,0 +1,160 @@
+<div class="layuimini-main">
+
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">商品名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="good_title" name="good_title" lay-verify="required" lay-reqtext="商品名称不能为空"
+                       placeholder="请输入商品名称" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">类别</label>
+            <div class="layui-input-inline" style="width: 150px;">
+                <select id="good_type" lay-verify="required" lay-filter="selFilter">
+                    <option value="">请选择</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">商品库存</label>
+            <div class="layui-input-block">
+                <input type="number" id="good_num" name="good_num" lay-verify="required" lay-reqtext="商品库存不能为空"
+                       placeholder="请输入商品库存" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">商品价格</label>
+            <div class="layui-input-block">
+                <input type="number" id="good_price" name="price" lay-verify="required" lay-reqtext="商品价格不能为空"
+                       placeholder="请输入商品库存" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品规格</label>
+            <div class="layui-input-block">
+                <input type="text" id="good_specs" name="good_specs" placeholder="请输入商品规格" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">商品描述</label>
+            <div class="layui-input-block">
+                <textarea id="good_detail" name="good_detail" class="layui-textarea" placeholder="请输入商品描述"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品图片</label>
+            <div class="layui-upload layui-input-block">
+                <button type="button" class="layui-btn" id="test1">上传图片</button>
+                <div class="layui-input-block">
+                    <img class="layui-upload-img " width="300px" height="300px" id="cover">
+                    <p id="demoText"></p>
+                </div>
+                <div style="width: 95px;">
+                    <div class="layui-progress layui-progress-big" lay-showpercent="yes" lay-filter="demo">
+                        <div class="layui-progress-bar" lay-percent=""></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var cover_url="";
+    var type=parent.type;
+    layui.use(['form', 'table', 'upload', 'element', 'layer'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            upload = layui.upload
+            , element = layui.element
+            , layer = layui.layer,
+            $ = layui.$;
+
+
+        $(document).ready(function () {
+            console.log(type);
+            for (var i = 0; i < type.length; i++) {
+                var selectItem="<option value="+type[i]['id']+">"+type[i]['name']+"</option>";
+                $("#good_type").append(selectItem);
+            }
+        });
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            data.field['cover']=cover_url;
+            data.field['action']='addGoods';
+            data.field['type_id']= $("#good_type").val();
+            data.field['type']= $("#good_type").find("option:selected").text();
+            console.log(data.field);
+
+            $.ajax({
+                url: "../../Api/goods/goodsController.php",
+                data: data.field,
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.msg);
+                    } else {
+                        layer.msg(data.msg);
+                    }
+
+                }
+            })
+
+            return false;
+        });
+        //常规使用 - 普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: '../../Api/utils/upload.php' //改成您自己的上传接口
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#cover').attr('src', result); //图片链接（base64）
+                });
+
+                element.progress('demo', '0%'); //进度条复位
+                layer.msg('上传中', {icon: 16, time: 0});
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg(res.msg);
+                }
+                //上传成功的一些操作
+                console.log(res.data);
+                cover_url=res.data;
+                $('#demoText').html(''); //置空上传失败的状态
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+            //进度条
+            , progress: function (n, elem, e) {
+                element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
+                if (n == 100) {
+                    layer.msg('上传完毕', {icon: 1});
+                }
+            }
+        });
+    });
+</script>

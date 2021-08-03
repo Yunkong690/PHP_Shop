@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会员中心 - 织梦商城模板-dedehtml.com</title>
+    <meta name="keywords" content="织梦商城模板,织梦小商城,织梦商城支付"/>
+    <meta name="description" content="织梦购物商城源码，集成购物车，会员系统，支付系统，商品属性，红包，优惠券"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../res/static/css/index.css">
+    <link rel="stylesheet" href="../res/static/css/user.css">
+</head>
+<body class="user">
+<div class="house-header">
+    <div class="layui-container">
+        <div class="house-nav">
+           <span class="layui-breadcrumb memberinfo" lay-separator="|">
+            <a href="../member/login.html" id="turnLogin"><label id="username_bar"></label></a>
+              <a href="" id="logout">退出</a>
+        </span>
+            <span class="layui-breadcrumb house-breadcrumb-icon" lay-separator=" "><a id="search"><i
+                class="layui-icon layui-icon-house-find"></i></a>
+        <a href="/member/"><i class="layui-icon layui-icon-username"></i></a> <a href="/plus/car.php"><i
+                    class="layui-icon layui-icon-house-shop"></i></a></span></div>
+        <div class="house-banner layui-form"><a class="banner" href="/"><img src="../res/static/img/logo.png"
+                                                                             alt="织梦商城模板-dedehtml.com">
+        </a>
+            <div class="layui-input-inline"><input type="text" placeholder="搜索好物" class="layui-input"><i
+                    class="layui-icon layui-icon-house-find"></i></div>
+            <a class="shop" href="/plus/car.php"><i class="layui-icon layui-icon-house-shop"></i><span
+                    class="layui-badge totalNum"></span></a></div>
+        <ul class="layui-nav close">
+            <li class="layui-nav-item layui-this"><a href="../index.html">首页</a></li>
+            <li class="layui-nav-item ">
+                <a href="../all/index.html">居家用品</a></li>
+<!--            <li class="layui-nav-item "><a href="/device/">小家电</a></li>-->
+<!--            <li class="layui-nav-item ">-->
+<!--                <a href="/wash/">洗护</a></li>-->
+<!--            <li class="layui-nav-item "><a href="/kitchen/">厨具</a></li>-->
+<!--            <li class="layui-nav-item ">-->
+<!--                <a href="/supplies/">日用品</a></li>-->
+        </ul>
+        <button id="switch"><span></span><span class="second"></span><span class="third"></span></button>
+    </div>
+</div>
+<div class="layui-container userpublic house-userPer">
+    <div class="layui-row layui-col-space20">
+        <p class="layui-hide-xs title">
+            <a href="/">首页</a> &gt; <span>个人中心</span>
+        </p>
+        <div class="layui-col-sm2">
+            <ul class="user-list">
+                <li class="active"><a href="/member/">个人中心</a></li>
+                <li><a href="index_do.php?fmdo=login&dopost=exit">退出</a></li>
+            </ul>
+        </div>
+        <div class="layui-col-sm10">
+            <div class="user-person">
+                <div class="person">
+                    <img src="../res/static/img/header.jpg">
+                    <div class="name">
+                        <p><label id="username"></label> </p>
+                        <span><i>个人用户</i></span>
+                    </div>
+                </div>
+<!--                <ul>-->
+<!--                    <li>优惠券<span>10张</span></li>-->
+<!--                    <li>礼品卡<span>1张</span></li>-->
+<!--                    <li>积分<span>1000</span></li>-->
+<!--                    <li>待发货<span>12个</span></li>-->
+<!--                    <li>待收货<span>2个</span></li>-->
+<!--                    <li>待评价<span>2个</span></li>-->
+<!--                </ul>-->
+            </div>
+        </div>
+        <div class="layui-col-sm10">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">全部订单</li>
+<!--                    <li>等待发货</li>-->
+<!--                    <li>已发货</li>-->
+<!--                    <li>交易完成</li>-->
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <table id="house-user-order" lay-filter="house-user-order">
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="orderTpl">
+    <div style="text-align: left; display: inline-block; vertical-align: middle;">
+        <p>订单号：{{d.order_id}}</p>
+        <p>交易单号：{{d.order_id}}</p>
+        <p>交易时间：{{d.time}}</p>
+    </div>
+</script>
+<!--<script type="text/html" id="imgTpl">-->
+<!--    <span style="color: #73c292;">订单详情</span>-->
+<!--</script>-->
+<script type="text/html" id="priceTpl">
+    <div style="display: inline-block; vertical-align: middle;">
+        <p>￥{{d.bill}}</p>
+    </div>
+</script>
+<script type="text/html" id="stateTpl">
+    {{#  if(d.status == 1){ }}
+    <span style="color: #73c292;">已支付</span>
+    {{#  } else if(d.status == 0){ }}
+    <span style="color: #ee715f;">待付款</span>
+    {{#  } else if(d.status == 3){ }}
+    <span style="color: #ee715f;">超时未付款</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="handleTpl">
+    <div style="display: inline-block; vertical-align: middle;">
+        <a class="handel" lay-event="check" style="color: #e39d55; cursor: pointer; display: block;">查看详情</a>
+        {{#  if(d.status == 1){ }}
+        <a class="handel" lay-event="evaluate" style="color: #e39d55; cursor: pointer; " hidden="hidden">去支付</a>
+        {{#  } else if(d.status == 0){ }}
+        <a class="handel" lay-event="evaluate" style="color: #e39d55; cursor: pointer; display: block;" >去支付</a>
+        {{#  } }}
+
+    </div>
+</script>
+<script src="../res/layui/layui.js"></script>
+<script>layui.config({base: "../res/static/js/"}).use("house")</script>
+<div class="house-footer">
+    <div class="layui-container">
+        <div class="intro"><span class="first"><i class="layui-icon layui-icon-house-shield"></i>7天无理由退换货</span> <span
+                class="second"><i class="layui-icon layui-icon-house-car"></i>满99元全场包邮</span> <span class="third"><i
+                class="layui-icon layui-icon-house-diamond"></i>100%品质保证</span> <span class="last"><i
+                class="layui-icon layui-icon-house-tel"></i>客服400-8888-866</span></div>
+        <div class="about"><span class="layui-breadcrumb" lay-separator="|"><a href="/about.html">关于我们</a><a
+                href="/help.html">帮助中心</a><a href="/service.html">售后服务</a><a href="/delivery.html">配送服务</a><a
+                href="/supply.html">关于货源</a></span>
+            <p>织梦商城模板 版权所有 &copy; 2012-2020</p></div>
+    </div>
+</div>
+<script src="../res/layui/layui.js"></script>
+<script>
+    var username = getMyCookie('username');
+
+
+    function getMyCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+    function carClick() {
+        layer.msg('未登录');
+    }
+    document.getElementById("username").innerText = username;
+</script>
+<script>layui.config({base: "../res/static/js/"}).use("house")</script>
+</body>
+</html>
